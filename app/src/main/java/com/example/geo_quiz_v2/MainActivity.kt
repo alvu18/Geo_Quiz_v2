@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var previous_button: Button
     private lateinit var Cheat_button: Button
 
-
+//2222
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
