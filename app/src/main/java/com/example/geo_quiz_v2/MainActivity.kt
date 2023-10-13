@@ -12,6 +12,7 @@ import com.example.geo_quiz_v2.databinding.ActivityMainBinding
 
 
 private const val TAG = "MainActivity"
+private var count=0
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val quizViewModel: QuizViewModel by viewModels()
@@ -36,21 +37,54 @@ class MainActivity : AppCompatActivity() {
             findViewById(R.id.question_text_view)
         trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
+            CountPrint()
+            HideButton(trueButton)
+            HideButton(falseButton)
         }
         falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
+            CountPrint()
+            HideButton(trueButton)
+            HideButton(falseButton)
         }
 
         updateQuestion()
 
         nextButton.setOnClickListener {
-           quizViewModel.moveToNext()
+           quizViewModel.moveToNext(nextButton,previous_button)
             updateQuestion()
+            if (quizViewModel.currentIndex!=quizViewModel.questionBank.size-1){
+
+                updateQuestion()
+            }
+            else{
+                nextButton.isEnabled=false
+                updateQuestion()
+
+
+            }
+
+
+
+
+            SeekerButton(trueButton)
+            SeekerButton(falseButton)
+
 
         }
         previous_button.setOnClickListener {
-            quizViewModel.moveToPrevi()
-            updateQuestion()
+
+            if (quizViewModel.currentIndex>0){
+                updateQuestion()
+                quizViewModel.moveToPrevi(previous_button,nextButton)
+            }
+            else {
+                updateQuestion()
+                previous_button.isEnabled=false
+            }
+
+            SeekerButton(trueButton)
+            SeekerButton(falseButton)
         }
 
         trueButton =findViewById(R.id.true_button)
@@ -87,8 +121,10 @@ class MainActivity : AppCompatActivity() {
         val correctAnswer = quizViewModel.currentQuestionAnswer
         val messageResId = if (userAnswer ==
             correctAnswer) {
+            count+=1
             R.string.correct_toast
-        } else {
+        }
+        else {
             R.string.incorrect_toast
         }
         Toast.makeText(this, messageResId,
@@ -96,10 +132,28 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun HideButton(but:Button){
+        but.visibility=View.GONE
 
+    }
+    private fun SeekerButton(but:Button){
+        but.visibility=View.VISIBLE
+
+    }
     private fun updateQuestion() {
         val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
+
+    }
+
+    private fun CountPrint(){
+        if (quizViewModel.currentIndex==quizViewModel.questionBank.size-1){
+            Toast.makeText(this, "Количество верных ответов="+count,
+                Toast.LENGTH_SHORT)
+                .show()
+
+        }
+
 
     }
 
