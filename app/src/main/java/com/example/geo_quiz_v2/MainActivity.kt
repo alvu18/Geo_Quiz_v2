@@ -1,5 +1,7 @@
 package com.example.geo_quiz_v2
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.geo_quiz_v2.databinding.ActivityMainBinding
 
 
+
 private const val TAG = "MainActivity"
 private var count=0
+private var countCheat=0
+private const val REQUEST_CODE_CHEAT = 0
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val quizViewModel: QuizViewModel by viewModels()
@@ -21,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: Button
     private lateinit var questionTextView: TextView
     private lateinit var previous_button: Button
+    private lateinit var Cheat_button: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity() {
          binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         trueButton = findViewById(R.id.true_button)
+        Cheat_button = findViewById(R.id.Cheat_button)
         falseButton = findViewById(R.id.false_button)
         nextButton =
             findViewById(R.id.next_button)
@@ -72,6 +79,32 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
+        Cheat_button.setOnClickListener {
+            if (countCheat<3){
+                val answerIsTrue =
+                    quizViewModel.currentQuestionAnswer
+                val intent =
+                    CheatActivity.newIntent(this@MainActivity,
+                        answerIsTrue)
+                startActivityForResult(intent,
+                    REQUEST_CODE_CHEAT)
+
+            }
+            else {
+                CheatPrint()
+
+            }
+            countCheat+=1
+
+
+
+        }
+        updateQuestion()
+
+
+
+
         previous_button.setOnClickListener {
 
             if (quizViewModel.currentIndex>0){
@@ -92,7 +125,19 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        super.onActivityResult(requestCode,
+            resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_CODE_CHEAT)
+        {
+            quizViewModel.isCheater =
+                data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+        }
+    }
     override fun onStart() {
         super.onStart()
         Log.d(TAG,"onStart() called")
@@ -119,13 +164,11 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer:
                             Boolean) {
         val correctAnswer = quizViewModel.currentQuestionAnswer
-        val messageResId = if (userAnswer ==
-            correctAnswer) {
-            count+=1
-            R.string.correct_toast
-        }
-        else {
-            R.string.incorrect_toast
+        val messageResId = when {
+            quizViewModel.isCheater -> R.string.judgment_toast
+            userAnswer == correctAnswer ->
+                R.string.correct_toast
+            else -> R.string.incorrect_toast
         }
         Toast.makeText(this, messageResId,
             Toast.LENGTH_SHORT)
@@ -136,6 +179,14 @@ class MainActivity : AppCompatActivity() {
         but.visibility=View.GONE
 
     }
+
+    private fun CheatPrint(){
+        Toast.makeText(this, "Все попытки потрачены",
+            Toast.LENGTH_SHORT)
+            .show()
+
+    }
+
     private fun SeekerButton(but:Button){
         but.visibility=View.VISIBLE
 

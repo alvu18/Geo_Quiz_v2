@@ -1,58 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FFFFFF"
     android:gravity="center"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/question_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
         tools:text="@string/question_australia" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <Button
 
             android:id="@+id/true_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/true_button"
-            />
+            android:text="@string/true_button" />
+
         <Button
 
             android:id="@+id/false_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/false_button"
-            />
+            android:text="@string/false_button" />
     </LinearLayout>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
 
     <Button
-        android:id="@+id/previous_button"
+
+        android:id="@+id/Cheat_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/arrow_left"
-        android:drawablePadding="4dp"
-        android:text="@string/previous_button"
+        android:backgroundTint="#411988"
 
-        />
-    <Button
-        android:id="@+id/next_button"
+        android:fontFamily="sans-serif"
+        android:text="@string/cheat_button"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+
+        android:textStyle="bold"
+        app:cornerRadius="0dp" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next_button"
-        android:drawableEnd="@drawable/arrow_right"
-        android:drawablePadding="4dp"
-        />
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/previous_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/arrow_left"
+            android:drawablePadding="4dp"
+            android:text="@string/previous_button"
+
+            />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/arrow_right"
+            android:drawablePadding="4dp"
+            android:text="@string/next_button" />
+
+    </LinearLayout>
 
 </LinearLayout>
